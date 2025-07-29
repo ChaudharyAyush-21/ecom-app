@@ -11,6 +11,7 @@ const Collection = () => {
   const [filterProducts, setfilterProducts] = useState([]);
   const [category ,setCategory] =useState([]);
   const [subCategory , setsubCategory] = useState([]);
+  const [sortType , setsortType] = useState('relevant')
 
   const toggleCategory = (e)=>{
     if(category.includes(e.target.value)){
@@ -21,14 +22,58 @@ const Collection = () => {
     }
   }
 
+  const togglesubCategory = (e)=>{
+    if(subCategory.includes(e.target.value)){
+      setsubCategory(prev =>prev.filter(item => item !== e.target.value));
+    }
+    else{
+      setsubCategory(prev =>[...prev, e.target.value]);
+    }
+  };
+
+  const applyFilter =()=>{
+    let productCopy = products.slice();
+    if(category.length >0){
+      productCopy = productCopy.filter(item => category.includes(item.category));
+    }
+    if(subCategory.length >0){
+      productCopy = productCopy.filter(item => subCategory.includes(item.subCategory));
+    }
+    setfilterProducts(productCopy);
+  };
+
+  const shortProduct = ()=>{
+    let fpcopy = filterProducts.slice();
+    switch(sortType){
+      case 'low-high':
+        setfilterProducts(fpcopy.sort((a,b)=>(a.price-b.price)));
+        break;
+      case 'high-low':
+        setfilterProducts(fpcopy.sort((a,b)=>(b.price-a.price)));
+        break
+      default:
+        applyFilter();
+        break
+    }
+
+  };
+
+
+  // useEffect(()=>{
+  //   setfilterProducts(products);
+  // },[])
 
   useEffect(()=>{
-    setfilterProducts(products)
-  },[])
+    applyFilter();
+  },[category,subCategory])
 
   useEffect(()=>{
-    console.log(category)
-  },[category])
+    shortProduct();
+  },[sortType])
+
+  //   useEffect(()=>{
+  //   console.log(subCategory)
+  // },[subCategory])
 
   return (
     <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t'>
@@ -58,13 +103,13 @@ const Collection = () => {
             <p className='mb-3 text-sm font-medium'>TYPE</p>
             <div className='flex flex-col gap-2 text-sm font-light text-grey-700'>
               <p className='flex gap-2'>
-                <input className='w-3' type="checkbox" value={'Topwear'} />Topwear
+                <input className='w-3' type="checkbox" value={'Topwear'} onChange={togglesubCategory}/>Topwear
               </p>
               <p className='flex gap-2'>
-                <input className='w-3' type="checkbox" value={'Bottomwear'} />Bottomwear
+                <input className='w-3' type="checkbox" value={'Bottomwear'} onChange={togglesubCategory}/>Bottomwear
               </p>
               <p className='flex gap-2'>
-                <input className='w-3' type="checkbox" value={'Winterwear'} />Winterwear
+                <input className='w-3' type="checkbox" value={'Winterwear'} onChange={togglesubCategory}/>Winterwear
               </p>
             </div>
           </div>
@@ -74,7 +119,7 @@ const Collection = () => {
         <div className='flex justify-between text-base sm:text-2xl mb-4'>
           <Title text1={'ALL'} text2={'COLLECTION'}/>
           {/* product sort */}
-          <select className='border-2 border-gray-300 text-sm px-2'>
+          <select onChange={(e)=>setsortType(e.target.value)} className='border-2 border-gray-300 text-sm px-2'>
             <option value="relavent">SortBy: Relavent</option>
             <option value="low-high">SortBy: Low to High</option>
             <option value="high-low">SortBy: High to Low</option>
