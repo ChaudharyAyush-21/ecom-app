@@ -42,15 +42,21 @@ const ShopContextProvider = (props) => {
                         totalCount+=cartitems[items][item];
                     }
                 } catch (error) {
-                    toast.error("Please enter item to cart");
+                    console.log(error);
                 }
             }
         }
         return totalCount;
     }
 
+    const updateQuantity = async(itemId,size,quantity)=>{
+        let cartData = structuredClone(cartitems);
+        cartData[itemId][size]= quantity;
+        setCartitems(cartData);
+    }
+
     const value ={
-        products, currency, delivery_fee, search, setSearch, showsearch, setshowSearch, cartitems, addToCart, getCartcount
+        products, currency, delivery_fee, search, setSearch, showsearch, setshowSearch, cartitems, addToCart, getCartcount, updateQuantity
     }
     return(
         <ShopContext.Provider value={value}>
