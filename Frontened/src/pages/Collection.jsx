@@ -64,9 +64,7 @@ const Collection = () => {
   };
 
 
-  // useEffect(()=>{
-  //   setfilterProducts(products);
-  // },[])
+
 
   useEffect(()=>{
     applyFilter();
@@ -76,9 +74,7 @@ const Collection = () => {
     shortProduct();
   },[sortType])
 
-  //   useEffect(()=>{
-  //   console.log(subCategory)
-  // },[subCategory])
+
 
   return (
     <div className='flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t'>
