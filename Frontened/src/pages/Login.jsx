@@ -3,9 +3,9 @@ import React, { useState } from 'react'
 const Login = () => {
 
   const [currentState , setCurrentState] = useState('Sign Up');
-  const onSubmitHandler = (e) =>{
-    e.preventDefault();
-  }
+  // const onSubmitHandler = (e) =>{
+  //   e.preventDefault();
+  // }
 
   return (
     <form onSubmit={onSubmitHandler} className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-grey-800'>
