@@ -1,4 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
+import Product from '../models/productModel.js';
+import productModel from '../models/productModel.js';
 //function for adding the product
 const addProduct =async (req, res) => {
 try {
@@ -16,10 +18,24 @@ try {
         return result.secure_url
     })
 )
+    const productData = {
+        name,
+        description,
+        price:Number(price),
+        category,
+        subCategory,
+        sizes: JSON.parse(sizes),
+        bestseller: bestseller === 'true' ? true : false,
+        images: imagesUrl,
+        date:Date.now()
+    }
 
-    console.log(name, description, price, category, subCategory, sizes, bestseller);
-    console.log(imagesUrl);
-    res.json({});
+    console.log(productData);
+
+    const product = new productModel(productData);
+    await product.save();
+
+    res.json({success:true, message:"Product added successfully"});
 } catch (error) {
     console.log(error);
     res.json({success:false, message:error.message})
@@ -27,15 +43,43 @@ try {
 }
 }
 //function for the list product
-const listProduct = (req, res) => {
+const listProduct =async (req, res) => {
 
+    try {
+        
+        const products = await productModel.find({})
+        res.json({success:true, products})
+
+    } catch (error) {
+      console.log(error);
+        res.json({success:false, message:error.message})
+        
+    }
 }
 //function for the removing the product
-const removeProduct = (req, res) => {
-
+const removeProduct =async (req, res) => {
+try {
+    await productModel.findByIdAndDelete(req.body.id);
+    res.json({success:true, message:"Product removed successfully"})
+} catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message})
+}
 }
 //function for the single product
-const singleProduct = (req, res) => {
+const singleProduct =async (req, res) => {
+    try {
+        const { productId } = req.body;
+        const product = await productModel.findById(productId);
+        if (product) {
+            res.json({ success: true, product });
+        } else {
+            res.json({ success: false, message: "Product not found" });
+        }
+    } catch (error) {
+        console.log(error);
+        res.json({success:false, message:error.message})
+    }
 
 }
 
