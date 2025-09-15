@@ -127,13 +127,13 @@ const Collection = () => {
           </select>
         </div>
         {/* map products */}
-        {/* <div className='grid grid-cols-2 md:gride-cols-3 lg:grid-cols-4 gap-4 gap-y-6'>
+        <div className='grid grid-cols-2 md:gride-cols-3 lg:grid-cols-4 gap-4 gap-y-6'>
           {
             filterProducts.map((item,index)=>(
                 <ProductItem key={index} id={item._id} name={item.name} price={item.price} images={item.images}/>
             ))
           }
-        </div> */}
+        </div>
       </div>
     </div>
   )
